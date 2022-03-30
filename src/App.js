@@ -1,23 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import DetailSong from './Components/DetailSong';
+import ListSongs from './Components/ListSongs';
+import NavBar from './Components/NavBar';
+import DataSongs from './data/songs.json';
+import { Songs } from './Context';
+import Playing from './Components/Playing';
+import { useState } from 'react'
+
+
 
 function App() {
+  const [song, setSong] = useState(DataSongs[0]);
+  const handleSetSong = (idSong) => {
+    const song = DataSongs.find(song => song.id === idSong)
+    if (!song) setSong(DataSongs[0])
+    else setSong(song)
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App h-full">
+      <Songs.Provider value={{ DataSongs, song, handleSetSong }}>
+        <NavBar />
+        <div className='grid grid-cols-3 bg-slate-700 h-screen-navbar overflow-hidden'>
+          {/* Col span 1 */}
+          <DetailSong />
+          {/* Col span 2 */}
+          <ListSongs />
+        </div>
+        <Playing />
+      </Songs.Provider>
     </div>
   );
 }
